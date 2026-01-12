@@ -1,16 +1,9 @@
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 
 public class DataReader {
-    // private String courses = "";
-    // private String crns = "";
     private ArrayList<Course> coursesAry;
 
     public DataReader(String data) throws FileNotFoundException {
@@ -65,13 +58,13 @@ public class DataReader {
                 if (line.contains("Class")) {
                     String temp[] = line.split("\t");
                     String temp2[] = temp[1].split(" - ");
-                    String startTime = convertTime(temp2[0]);
-                    String endTime = convertTime(temp2[1]);
-                    String weekday = convertWeekday(temp[2]);
+                    String startTime = DataConverter.convertTime(temp2[0]);
+                    String endTime = DataConverter.convertTime(temp2[1]);
+                    String weekday = DataConverter.convertWeekday(temp[2]);
                     String[] temp3 = temp[4].split(" - ");
-                    String startDate = convertDate(temp3[0]);
-                    String endDate = convertDate(temp3[1]);
-                    String location = convertLocation(temp[3]);
+                    String startDate = DataConverter.convertDate(temp3[0]);
+                    String endDate = DataConverter.convertDate(temp3[1]);
+                    String location = DataConverter.convertLocation(temp[3]);
                     Timeslot t = new Timeslot(crn, courseArr[2], startTime, endTime, startDate, endDate, weekday,
                             location);
                     c.addTimeslot(t);
@@ -89,76 +82,6 @@ public class DataReader {
                 return course;
         }
         return null;
-    }
-
-    private String convertWeekday(String inputTime) {
-        switch (inputTime) {
-            case "M":
-                return "MON";
-            case "T":
-                return "TUE";
-            case "W":
-                return "WED";
-            case "R":
-                return "THU";
-            case "F":
-                return "FRI";
-            case "S":
-                return "SAT";
-            default:
-                return "SUN";
-        }
-    }
-
-    private String convertLocation(String inputLocation) {
-        String[] temp = inputLocation.split(" ");
-        String result = "";
-        switch (temp[0]) {
-            case "Yeung":
-                result = "AC1";
-                break;
-            case "Bank":
-                result = "BOC";
-                break;
-            case "Li":
-                result = "AC2";
-                break;
-            case "R":
-                result = "CMC";
-                break;
-            default:
-                result = "Unknown location";
-                break;
-        }
-        result += "-" + temp[temp.length - 1];
-        return result;
-    }
-
-    private String convertDate(String inputDate) {
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("MMM d, yyyy", Locale.ENGLISH);
-
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy/M/d");
-
-        // 3. Convert
-        LocalDate date = LocalDate.parse(inputDate, inputFormatter);
-        String result = date.format(outputFormatter);
-
-        return result;
-    }
-
-    private String convertTime(String inputTime) {
-        DateTimeFormatter inputFormatter = new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendPattern("h:mm a")
-                .toFormatter(Locale.ENGLISH);
-
-        // 2. Define Output Format (24-hour clock)
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
-        // 3. Parse and Convert
-        LocalTime time = LocalTime.parse(inputTime, inputFormatter);
-        String militaryTime = time.format(outputFormatter);
-        return militaryTime;
     }
 
     public String getCourseIds() {

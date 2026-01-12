@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -62,11 +61,16 @@ public class ICSExporter {
     }
 
     /**
-     * Helper method to append a single VEVENT block to the builder.
+     * 
+     * @param title
+     * @param startDay
+     * @param startTime
+     * @param endDay
+     * @param endTime
      */
     public void addSingleEvent(String title, String startDay, String startTime, String endDay, String endTime) {
 
-        addEvent(title, formatToUtc(startDay, startTime), formatToUtc(endDay, endTime), "");
+        addEvent(title, DataConverter.formatToUtc(startDay, startTime), DataConverter.formatToUtc(endDay, endTime), "");
     }
 
     /**
@@ -100,8 +104,10 @@ public class ICSExporter {
             startDay = nearby(startDay, repeatDay);
             endDay = nearby(endDay, repeatDay);
 
-            String rrule = "FREQ=WEEKLY;BYDAY=" + day + ";UNTIL=" + formatToUtc(endRepeatDay, endRepeatTime);
-            addEvent(title, formatToUtc(startDay, startTime), formatToUtc(endDay, endTime), rrule);
+            String rrule = "FREQ=WEEKLY;BYDAY=" + day + ";UNTIL="
+                    + DataConverter.formatToUtc(endRepeatDay, endRepeatTime);
+            addEvent(title, DataConverter.formatToUtc(startDay, startTime), DataConverter.formatToUtc(endDay, endTime),
+                    rrule);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("No such week day");
@@ -151,7 +157,7 @@ public class ICSExporter {
 
         // CRITICAL: Generate a new unique ID for every single event
         builder.append("UID:").append(UUID.randomUUID().toString()).append("\r\n");
-        builder.append("DTSTAMP:").append(formatToUtc(LocalDateTime.now())).append("\r\n");
+        builder.append("DTSTAMP:").append(DataConverter.formatToUtc(LocalDateTime.now())).append("\r\n");
 
         builder.append("DTSTART:").append(start).append("\r\n");
         builder.append("DTEND:").append(end).append("\r\n");
@@ -162,28 +168,6 @@ public class ICSExporter {
 
         builder.append("SUMMARY:").append(title).append("\r\n");
         builder.append("END:VEVENT\r\n");
-    }
-
-    private String formatToUtc(LocalDateTime date) {
-        return date.atZone(java.time.ZoneId.systemDefault())
-                .withZoneSameInstant(ZoneOffset.UTC)
-                .format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'"));
-    }
-
-    private String formatToUtc(String day, String time) {
-        LocalDateTime dt;
-        String[] dayArr = day.split("/");
-        String[] timeArr = time.split(":");
-        int[] dayIntArr = new int[dayArr.length];
-        for (int i = 0; i < dayIntArr.length; i++) {
-            dayIntArr[i] = Integer.parseInt(dayArr[i]);
-        }
-        int[] timeIntArr = new int[timeArr.length];
-        for (int i = 0; i < timeIntArr.length; i++) {
-            timeIntArr[i] = Integer.parseInt(timeArr[i]);
-        }
-        dt = LocalDateTime.of(dayIntArr[0], dayIntArr[1], dayIntArr[2], timeIntArr[0], timeIntArr[1]);
-        return formatToUtc(dt);
     }
 
 }
