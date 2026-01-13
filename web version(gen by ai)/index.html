@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityU Timetable Exporter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container fade-in">
+        <h1>📅 CityU Timetable Exporter</h1>
+        <p class="subtitle">Convert your raw AIMS timetable text into an ICS calendar file.</p>
+
+        <div class="instructions">
+            <strong>How to use:</strong>
+            <ol>
+                <li>Go to AIMS and view your class schedule (List View where CRN is visible).</li>
+                <li>Select all text (Cmd+A / Ctrl+A) and Copy.</li>
+                <li>Paste the data below or upload a text file.</li>
+                <li>Click "Convert & Download".</li>
+            </ol>
+        </div>
+
+        <div class="form-group">
+            <label for="fileInput">Upload Text File (Optional):</label>
+            <input type="file" id="fileInput" accept=".txt" />
+        </div>
+
+        <div class="form-group">
+            <label for="inputData">Paste Timetable Data Here:</label>
+            <textarea id="inputData" placeholder="Paste your timetable text here...
+Example format:
+...
+Total Credit Hours: 12.000
+...
+12345 - CS1001 - Introduction to CS
+...
+CRN: 54321
+...
+Class    10:00 AM - 11:50 AM    T    AC1-G1234    Sep 01, 2026 - Dec 01, 2026
+..."></textarea>
+        </div>
+
+        <button id="convertBtn" class="btn">Convert & Download ICS 🚀</button>
+
+        <div class="footer">
+            <p>Built with ❤️ for CityU Students</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
