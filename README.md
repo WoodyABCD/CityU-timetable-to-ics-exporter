@@ -6,7 +6,7 @@
 
 A simple, beautiful web interface is now available! No Java installation needed.
 
-1. Open the [`web version(gen by ai)/index.html`](web version(gen by ai)/index.html) file in your browser.
+1. Download and open the [`web(GenByAI)/index.html`](web(GenByAI)/index.html) file in your browser.
 2. Paste your timetable content directly into the text area.
 3. Click **Convert & Download**.
 
