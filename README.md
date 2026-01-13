@@ -6,9 +6,8 @@
 
 A simple, beautiful web interface is now available! No Java installation needed.
 
-1. Download and open the [`web(GenByAI)/index.html`](web(GenByAI)/index.html) file in your browser.
-2. Paste your timetable content directly into the text area.
-3. Click **Convert & Download**.
+No download anymore, a handsome guy from ChinU is helping CU
+[click here to open the web version](https://lamkke.github.io/CityU-timetable-to-ics-exporter/)
 
 ## How to get the source data
 
