@@ -30,7 +30,7 @@ public class ICSExporter {
         this(calendarName);
         for (Course c : courses) {
             for (Timeslot t : c.getTimeslots()) {
-                addWeeklyEvent(t.getLocation() + "(" + c.getId() + ")",
+                addWeeklyEvent(genTitle(t, c),
                         t.getStartDate(), t.getStartTime(),
                         t.getStartDate(), t.getEndTime(),
                         t.getWeekday(),
@@ -43,7 +43,7 @@ public class ICSExporter {
         this();
         for (Course c : courses) {
             for (Timeslot t : c.getTimeslots()) {
-                addWeeklyEvent(t.getLocation() + "(" + c.getId() + ")",
+                addWeeklyEvent(genTitle(t, c),
                         t.getStartDate(), t.getStartTime(),
                         t.getStartDate(), t.getEndTime(),
                         t.getWeekday(),
@@ -55,12 +55,16 @@ public class ICSExporter {
     public ICSExporter(Course course) {
         this(course.getId());
         for (Timeslot t : course.getTimeslots()) {
-            addWeeklyEvent(t.getLocation() + "(" + course.getId() + ")",
+            addWeeklyEvent(genTitle(t, course),
                     t.getStartDate(), t.getStartTime(),
                     t.getStartDate(), t.getEndTime(),
                     t.getWeekday(),
                     t.getEndDate(), t.getEndTime());
         }
+    }
+
+    private String genTitle(Timeslot t, Course c) {
+        return t.getLocation() + "(" + c.getId() + t.getType().charAt(1) + ")";
     }
 
     /**
@@ -181,6 +185,7 @@ public class ICSExporter {
         // LocalDateTime endDT = LocalDateTime.of(2026, 1, 20, 11, 0);
         // RRULE: Weekly on Mondays
         // String rule = "FREQ=WEEKLY;BYDAY=MO";
+        // System.out.println(title);
         builder.append("BEGIN:VEVENT\r\n");
 
         // CRITICAL: Generate a new unique ID for every single event
